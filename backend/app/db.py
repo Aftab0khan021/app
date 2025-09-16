@@ -2,7 +2,7 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGODB_URI = os.getenv("MONGO_URL")
+MONGODB_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "ai_resume_checker")
 
 _client = None
