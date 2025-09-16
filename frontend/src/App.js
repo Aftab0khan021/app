@@ -10,7 +10,11 @@ import { Badge } from "./components/ui/badge";
 import { Separator } from "./components/ui/separator";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// If backend routes are /api/v1/resume/upload and /api/v1/resume/analyze
+const API = `${BACKEND_URL}/api/v1/resume`;
+await axios.post(`${API}/upload`, formData, { ... });     // file upload
+await axios.post(`${API}/analyze`, { resume_text, job_description }); // analyze
+
 
 function App() {
   const [resumeFile, setResumeFile] = useState(null);

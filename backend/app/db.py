@@ -2,20 +2,22 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGODB_URI = os.getenv(mongodb+srv://Vercel-Admin-ai-resume-checker:Aft@bkhan0786@ai-resume-checker.i5iftpv.mongodb.net/?retryWrites=true&w=majority&appName=ai-resume-checker)
+MONGODB_URI = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("MONGODB_DB", "ai_resume_checker")
 
 _client = None
 _db = None
 
-def get_client():
+def get_client() -> AsyncIOMotorClient:
     global _client
     if _client is None:
+        if not MONGO_URL:
+            raise RuntimeError("MONGO_URL environment variable is not set")
         _client = AsyncIOMotorClient(
-            MONGODB_URI,
+            MONGO_URL,
             serverSelectionTimeoutMS=5000,
             maxPoolSize=10,
-            tls=True,  # SRV uses TLS
+            tls=True,
         )
     return _client
 
