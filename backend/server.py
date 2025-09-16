@@ -18,8 +18,9 @@ import docx
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
 from app.db import get_db  # <- our fixed db helper
+db = get_db()
+await db.analysis_results.insert_one(doc.dict())
 
 # ----------------------------
 # NLTK bootstrap (only if missing)
