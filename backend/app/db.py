@@ -2,7 +2,7 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGODB_URL = os.getenv("MONGO_URL")
+MONGO_URL = os.getenv("MONGO_URL")  # keep naming consistent
 DB_NAME = os.getenv("DB_NAME", "ai_resume_checker")
 
 _client = None
@@ -17,7 +17,7 @@ def get_client() -> AsyncIOMotorClient:
             MONGO_URL,
             serverSelectionTimeoutMS=5000,
             maxPoolSize=10,
-            tls=True,
+            tls=True,  # works for Atlas SRV strings; if you use local Mongo, set tls=False
         )
     return _client
 
