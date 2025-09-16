@@ -1,3 +1,5 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from fastapi import FastAPI, APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
@@ -19,9 +21,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 # allow imports from the repo root (one level up from /backend)
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 # Download NLTK data
 try:
     nltk.data.find('tokenizers/punkt')
