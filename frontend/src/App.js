@@ -13,9 +13,6 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // If backend routes are /api/v1/resume/upload and /api/v1/resume/analyze
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-await axios.post(`${API}/upload-resume`, formData);   // matches backend
-await axios.post(`${API}/analyze`, { resume_text, job_description });  // matches backend
-
 function App() {
   const [resumeFile, setResumeFile] = useState(null);
   const [resumeText, setResumeText] = useState("");
