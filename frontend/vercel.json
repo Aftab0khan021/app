@@ -1,20 +1,12 @@
 ﻿{
-  "version": 2,
-  "framework": "create-react-app",
-  "env": {
-    "NODE_OPTIONS": "--openssl-legacy-provider"
-  },
-  "build": {
-    "env": {
-      "NODE_OPTIONS": "--openssl-legacy-provider"
-    }
-  },
-  "buildCommand": "npm install --legacy-peer-deps --force && npm run build",
-  "outputDirectory": "build",
-  "routes": [
+  "builds": [
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist", "buildCommand": "npm run build" }
     }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
