@@ -235,6 +235,45 @@ function App() {
                     </Button>
                   </div>
                 )}
+
+                {/* Manual Text Input Option */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-px bg-slate-300"></div>
+                    <span className="text-sm text-slate-500 px-3">OR</span>
+                    <div className="flex-1 h-px bg-slate-300"></div>
+                  </div>
+                  
+                  <Card className="border border-slate-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-indigo-600" />
+                        Paste Resume Text Directly
+                      </CardTitle>
+                      <CardDescription>
+                        Copy and paste your resume content here if you don't have a file
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Textarea
+                        value={resumeText}
+                        onChange={(e) => setResumeText(e.target.value)}
+                        placeholder="Paste your resume text here..."
+                        className="min-h-32 resize-none"
+                      />
+                      {resumeText && (
+                        <Button 
+                          onClick={() => setActiveTab("analyze")} 
+                          className="w-full gap-2 mt-3"
+                          size="lg"
+                        >
+                          Continue to Analysis
+                          <Target className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
               </CardContent>
             </Card>
           </div>
