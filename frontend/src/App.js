@@ -10,7 +10,6 @@ import { Badge } from "./components/ui/badge";
 import { Separator } from "./components/ui/separator";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-// If backend routes are /api/v1/resume/upload and /api/v1/resume/analyze
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 function App() {
