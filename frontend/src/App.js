@@ -116,7 +116,6 @@ function App() {
             variant={activeTab === "analyze" ? "default" : "ghost"}
             onClick={() => setActiveTab("analyze")}
             className="flex-1 gap-2"
-            disabled={!resumeText}
           >
             <Target className="w-4 h-4" />
             Analyze Match
