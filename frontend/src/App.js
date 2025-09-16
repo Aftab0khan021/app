@@ -170,7 +170,11 @@ function App() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors">
+                <div 
+                  className="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
                   <div className="flex flex-col items-center gap-4">
                     <div className="p-4 bg-indigo-100 rounded-full">
                       <Upload className="w-8 h-8 text-indigo-600" />
@@ -178,6 +182,7 @@ function App() {
                     <div>
                       <p className="text-lg font-medium text-slate-900">Choose your resume file</p>
                       <p className="text-slate-600">PDF or DOCX files supported</p>
+                      <p className="text-sm text-slate-500 mt-1">Or drag and drop a file here</p>
                     </div>
                     <input
                       type="file"
@@ -188,7 +193,14 @@ function App() {
                     />
                     <label htmlFor="resume-upload">
                       <Button size="lg" disabled={uploading} className="cursor-pointer">
-                        {uploading ? "Processing..." : "Select File"}
+                        {uploading ? (
+                          <>
+                            <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                            Processing...
+                          </>
+                        ) : (
+                          "Select File"
+                        )}
                       </Button>
                     </label>
                   </div>
