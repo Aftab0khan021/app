@@ -1,8 +1,14 @@
-{
+﻿{
   "version": 2,
+  "framework": "create-react-app",
   "buildCommand": "npm run build",
   "outputDirectory": "build",
+  "installCommand": "npm install",
   "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
