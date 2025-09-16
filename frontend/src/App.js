@@ -25,6 +25,7 @@ function App() {
     const file = event.target.files[0];
     if (!file) return;
 
+    console.log("File selected:", file.name, file.type);
     setResumeFile(file);
     setUploading(true);
 
@@ -32,19 +33,44 @@ function App() {
       const formData = new FormData();
       formData.append("file", file);
 
+      console.log("Uploading file to:", `${API}/upload-resume`);
       const response = await axios.post(`${API}/upload-resume`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
+      console.log("Upload response:", response.data);
       setResumeText(response.data.text);
       setActiveTab("analyze");
     } catch (error) {
       console.error("File upload error:", error);
-      alert("Error uploading file. Please try again.");
+      const errorMessage = error.response?.data?.detail || "Error uploading file. Please try again.";
+      alert(errorMessage);
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDrop = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      console.log("File dropped:", file.name, file.type);
+      
+      // Create a fake event object to reuse the existing upload handler
+      const fakeEvent = {
+        target: { files: [file] }
+      };
+      await handleFileUpload(fakeEvent);
     }
   };
 
