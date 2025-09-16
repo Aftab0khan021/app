@@ -124,7 +124,6 @@ function App() {
             variant={activeTab === "results" ? "default" : "ghost"}
             onClick={() => setActiveTab("results")}
             className="flex-1 gap-2"
-            disabled={!analysis}
           >
             <BarChart3 className="w-4 h-4" />
             View Results
