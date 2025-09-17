@@ -49,7 +49,7 @@ function App() {
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [activeTab, setActiveTab] = useState("upload");
 
-  // --- File selection ---
+  // --- File selection (does NOT upload) ---
   const onFileChange = (e) => {
     const file = e.target.files?.[0] || null;
     setSelectedFile(file);
@@ -69,9 +69,9 @@ function App() {
     }
   };
 
-  // --- Upload action ---
+  // --- Explicit upload action (button) ---
   const handleFileUpload = async (e) => {
-    e?.preventDefault?.();
+    e?.preventDefault?.(); // in case this is inside a <form>
     if (!selectedFile) {
       alert("Please select a PDF/DOC/DOCX first.");
       return;
@@ -79,13 +79,15 @@ function App() {
     try {
       setLoadingUpload(true);
       const form = new FormData();
+      // field name MUST be "file" (FastAPI expects this)
       form.append("file", selectedFile);
 
-      // ✅ FIX: removed manual Content-Type
+      // ✅ FIX: DO NOT set Content-Type manually (Axios will set boundary)
       const { data } = await api.post("/upload-resume", form, {
         maxBodyLength: 25 * 1024 * 1024,
       });
 
+      // Put extracted text into box and move to Analyze
       setResumeText(data?.text || "");
       setActiveTab("analyze");
     } catch (err) {
@@ -138,8 +140,369 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* header, tabs, upload, analyze, results, footer remain exactly as in your app.txt */}
-      {/* (content unchanged, only the handleFileUpload fix applied) */}
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-indigo-600 rounded-lg">
+              <Brain className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900">AI Resume Matcher</h1>
+              <p className="text-sm text-slate-600">Smart Resume & Job Description Analysis</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-6 py-8">
+        {/* Navigation Tabs */}
+        <div className="flex gap-2 mb-8 bg-white/60 p-2 rounded-xl backdrop-blur-sm">
+          <Button
+            variant={activeTab === "upload" ? "default" : "ghost"}
+            onClick={() => setActiveTab("upload")}
+            className="flex-1 gap-2"
+          >
+            <Upload className="w-4 h-4" />
+            Upload Resume
+          </Button>
+          <Button
+            variant={activeTab === "analyze" ? "default" : "ghost"}
+            onClick={() => setActiveTab("analyze")}
+            className="flex-1 gap-2"
+          >
+            <Target className="w-4 h-4" />
+            Analyze Match
+          </Button>
+          <Button
+            variant={activeTab === "results" ? "default" : "ghost"}
+            onClick={() => setActiveTab("results")}
+            className="flex-1 gap-2"
+            disabled={!analysis}
+          >
+            <BarChart3 className="w-4 h-4" />
+            View Results
+          </Button>
+        </div>
+
+        {/* Upload Tab */}
+        {activeTab === "upload" && (
+          <div className="space-y-6">
+            <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-2xl flex items-center gap-3 justify-center">
+                  <FileText className="w-8 h-8 text-indigo-600" />
+                  Upload Your Resume
+                </CardTitle>
+                <CardDescription className="text-lg">
+                  Upload your resume in PDF or DOCX format to get started
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div
+                  className="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="p-4 bg-indigo-100 rounded-full">
+                      <Upload className="w-8 h-8 text-indigo-600" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-medium text-slate-900">Choose your resume file</p>
+                      <p className="text-slate-600">PDF or DOCX files supported</p>
+                      <p className="text-sm text-slate-500 mt-1">Or drag and drop a file here</p>
+                    </div>
+
+                    {/* Hidden input + visible buttons */}
+                    <input
+                      id="resume-upload"
+                      type="file"
+                      accept=".pdf,.docx,.doc"
+                      onChange={onFileChange}
+                      className="hidden"
+                    />
+
+                    <div className="flex items-center gap-3">
+                      <label htmlFor="resume-upload">
+                        <Button size="lg" variant="outline" className="cursor-pointer">
+                          Select File
+                        </Button>
+                      </label>
+
+                      <Button
+                        size="lg"
+                        onClick={handleFileUpload}
+                        disabled={!selectedFile || loadingUpload}
+                        className="cursor-pointer"
+                      >
+                        {loadingUpload ? (
+                          <>
+                            <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                            Upload & Extract...
+                          </>
+                        ) : (
+                          "Upload & Extract"
+                        )}
+                      </Button>
+                    </div>
+
+                    {selectedFile && (
+                      <div className="text-sm text-slate-700 mt-1">
+                        Selected: <span className="font-medium">{selectedFile.name}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {resumeText && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-slate-900">Extracted Text Preview:</h4>
+                    <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto">
+                      <p className="text-sm text-slate-700 whitespace-pre-wrap">
+                        {resumeText.substring(0, 500)}...
+                      </p>
+                    </div>
+                    <Button onClick={() => setActiveTab("analyze")} className="w-full gap-2" size="lg">
+                      Continue to Analysis
+                      <Target className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* Manual Text Input Option */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-px bg-slate-300" />
+                    <span className="text-sm text-slate-500 px-3">OR</span>
+                    <div className="flex-1 h-px bg-slate-300" />
+                  </div>
+
+                  <Card className="border border-slate-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-indigo-600" />
+                        Paste Resume Text Directly
+                      </CardTitle>
+                      <CardDescription>Copy and paste your resume content here if you don't have a file</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Textarea
+                        value={resumeText}
+                        onChange={(e) => setResumeText(e.target.value)}
+                        placeholder="Paste your resume text here..."
+                        className="min-h-32 resize-none"
+                      />
+                      {resumeText && (
+                        <Button onClick={() => setActiveTab("analyze")} className="w-full gap-2 mt-3" size="lg">
+                          Continue to Analysis
+                          <Target className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Analysis Tab */}
+        {activeTab === "analyze" && (
+          <div className="grid lg:grid-cols-2 gap-6">
+            <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-indigo-600" />
+                  Resume Content
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                  placeholder="Your resume text will appear here..."
+                  className="min-h-72 resize-none"
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-indigo-600" />
+                  Job Description
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  placeholder="Paste the job description here..."
+                  className="min-h-72 resize-none"
+                />
+              </CardContent>
+            </Card>
+
+            <div className="lg:col-span-2">
+              <Button
+                type="button"
+                onClick={handleAnalysis}
+                disabled={loadingAnalyze || !resumeText || !jobDescription}
+                size="lg"
+                className="w-full gap-2 text-lg py-6"
+              >
+                {loadingAnalyze ? (
+                  <>
+                    <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                    Analyzing Match...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="w-5 h-5" />
+                    Analyze Resume Match
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Results Tab */}
+        {activeTab === "results" && analysis && (
+          <div className="space-y-6">
+            {/* Match Score Card */}
+            <Card className="border-0 shadow-xl bg-gradient-to-br from-white via-white to-indigo-50 backdrop-blur-sm">
+              <CardContent className="pt-6">
+                <div className="text-center space-y-4">
+                  <div className="flex items-center justify-center gap-3">
+                    <TrendingUp className="w-8 h-8 text-indigo-600" />
+                    <h2 className="text-3xl font-bold text-slate-900">Match Score</h2>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="text-6xl font-bold text-indigo-600">
+                      {Math.round(analysis.match_percentage)}%
+                    </div>
+                    <Badge className={`${getMatchColor(analysis.match_percentage)} text-white px-4 py-2 text-lg`}>
+                      {getMatchLabel(analysis.match_percentage)}
+                    </Badge>
+                    <Progress value={analysis.match_percentage} className="w-full h-4 bg-slate-200" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Analysis Summary */}
+            <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="w-5 h-5 text-indigo-600" />
+                  AI Analysis Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-700 leading-relaxed text-lg">{analysis.analysis_summary}</p>
+              </CardContent>
+            </Card>
+
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* Matched Skills */}
+              <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-emerald-700">
+                    <CheckCircle className="w-5 h-5" />
+                    Matched Skills ({analysis.matched_skills.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {analysis.matched_skills.map((skill, index) => (
+                      <Badge key={index} className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Missing Skills */}
+              <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-rose-700">
+                    <XCircle className="w-5 h-5" />
+                    Missing Skills ({analysis.missing_skills.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {analysis.missing_skills.map((skill, index) => (
+                      <Badge key={index} className="bg-rose-100 text-rose-800 hover:bg-rose-200">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recommendations */}
+            <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-amber-600" />
+                  Improvement Recommendations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {analysis.recommendations.map((recommendation, index) => (
+                    <div key={index} className="flex gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                      <div className="flex-shrink-0 mt-0.5">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                      </div>
+                      <p className="text-slate-700">{recommendation}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4 justify-center">
+              <Button
+                onClick={() => {
+                  setActiveTab("upload");
+                  setSelectedFile(null);
+                  setResumeText("");
+                  setJobDescription("");
+                  setAnalysis(null);
+                }}
+                variant="outline"
+                size="lg"
+                className="gap-2"
+              >
+                <Upload className="w-4 h-4" />
+                New Analysis
+              </Button>
+              <Button onClick={() => window.print()} size="lg" className="gap-2">
+                <Download className="w-4 h-4" />
+                Export Results
+              </Button>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-8 mt-16">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Brain className="w-5 h-5 text-indigo-400" />
+            <span className="font-semibold">AI Resume Matcher</span>
+          </div>
+          <p className="text-slate-400">Powered by advanced AI to help you land your dream job</p>
+        </div>
+      </footer>
     </div>
   );
 }
