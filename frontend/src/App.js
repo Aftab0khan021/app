@@ -214,7 +214,6 @@ function App() {
                       <p className="text-slate-600">PDF or DOCX files supported</p>
                       <p className="text-sm text-slate-500 mt-1">Or drag and drop a file here</p>
                     </div>
-
                     {/* Hidden input + visible buttons */}
                     <input
                       ref={fileInputRef}
@@ -224,7 +223,6 @@ function App() {
                       onChange={onFileChange}
                       className="hidden"
                     />
-
                     <div className="flex items-center gap-3">
                     
                         <Button type="button"size="lg"variant="outline"className="cursor-pointer"onClick={() => fileInputRef.current?.click()}>
