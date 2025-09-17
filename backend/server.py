@@ -46,9 +46,6 @@ DEFAULT_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
     "https://app-git-main-aftab-pathans-projects-9c06d6e7.vercel.app",  # ✅ your deployed Vercel frontend
-    "https://app-2qwezbwot-aftab-pathans-projects-9c06d6e7.vercel.app",  # your current preview
-    "https://app-b11ccjv21-aftab-pathans-projects-9c06d6e7.vercel.app",
-    "https://app-bhpgotxca-aftab-pathans-projects-9c06d6e7.vercel.app",
 ]
 
 # Optionally allow comma-separated extra origins via env (e.g. preview URLs)
