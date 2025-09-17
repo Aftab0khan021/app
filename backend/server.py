@@ -53,13 +53,14 @@ _extra = os.getenv("FRONTEND_ORIGINS", "").strip()
 if _extra:
     DEFAULT_ORIGINS += [o.strip() for o in _extra.split(",") if o.strip()]
 
-app.add_middleware(
+aapp.add_middleware(
     CORSMiddleware,
-    allow_origins=DEFAULT_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"],
-    max_age=86400,
+    allow_origin_regex=r"^https://app(?:-[a-z0-9]+)?-aftab-pathans-projects-9c06d6e7\.vercel\.app$",
+    # Optional: also allow localhost for local dev
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,          # keep True if you ever use cookies; otherwise False is also fine
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ----------------------------
