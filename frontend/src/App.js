@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 import axios from "axios";
 import {
@@ -48,6 +48,7 @@ function App() {
   const [loadingAnalyze, setLoadingAnalyze] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [activeTab, setActiveTab] = useState("upload");
+  const fileInputRef = useRef(null);
 
   // --- File selection (does NOT upload) ---
   const onFileChange = (e) => {
@@ -216,6 +217,7 @@ function App() {
 
                     {/* Hidden input + visible buttons */}
                     <input
+                      ref={fileInputRef}
                       id="resume-upload"
                       type="file"
                       accept=".pdf,.docx,.doc"
@@ -224,17 +226,18 @@ function App() {
                     />
 
                     <div className="flex items-center gap-3">
-                      <label htmlFor="resume-upload">
-                        <Button size="lg" variant="outline" className="cursor-pointer">
+                    
+                        <Button type="button"size="lg"variant="outline"className="cursor-pointer"onClick={() => fileInputRef.current?.click()}>
                           Select File
                         </Button>
-                      </label>
+                      
 
                       <Button
-                        size="lg"
-                        onClick={handleFileUpload}
-                        disabled={!selectedFile || loadingUpload}
-                        className="cursor-pointer"
+                      type="button"
+                      size="lg"
+                      onClick={handleFileUpload}
+                      disabled={!selectedFile || loadingUpload}
+                      className="cursor-pointer"
                       >
                         {loadingUpload ? (
                           <>
