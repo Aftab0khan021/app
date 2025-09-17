@@ -53,7 +53,7 @@ _extra = os.getenv("FRONTEND_ORIGINS", "").strip()
 if _extra:
     DEFAULT_ORIGINS += [o.strip() for o in _extra.split(",") if o.strip()]
 
-aapp.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=r"^https://app(?:-[a-z0-9]+)?-aftab-pathans-projects-9c06d6e7\.vercel\.app$",
     # Optional: also allow localhost for local dev
