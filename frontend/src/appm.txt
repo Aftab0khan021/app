@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 import axios from "axios";
 import {
@@ -20,13 +20,20 @@ import { Progress } from "./components/ui/progress";
 import { Badge } from "./components/ui/badge";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL; // e.g. https://ai-resume-checker-f4xs.onrender.com
+const BACKEND_ROOT = BACKEND_URL 
+  .replace(/\/+$/g, "")       // remove trailing slashes
+  .replace(/\/api$/i, "");    // remove trailing /api if someone set it by mistake
+
+if (!BACKEND_ROOT) {
+  console.error("REACT_APP_BACKEND_URL is missing. Set it to your backend root (no /api).");
+}
 
 // Single axios client for all calls
 const api = axios.create({
-  baseURL: `${BACKEND_URL}/api`,
+  baseURL: `${BACKEND_ROOT}/api`,
   timeout: 20000,
 });
-
+console.log("API base:", api.defaults.baseURL);
 // Auto-retry once if Render free dyno is waking (503)
 api.interceptors.response.use(
   (r) => r,
@@ -48,6 +55,7 @@ function App() {
   const [loadingAnalyze, setLoadingAnalyze] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [activeTab, setActiveTab] = useState("upload");
+  const fileInputRef = useRef(null);
 
   // --- File selection (does NOT upload) ---
   const onFileChange = (e) => {
@@ -82,8 +90,8 @@ function App() {
       // field name MUST be "file" (FastAPI expects this)
       form.append("file", selectedFile);
 
+      // ✅ FIX: DO NOT set Content-Type manually (Axios will set boundary)
       const { data } = await api.post("/upload-resume", form, {
-        headers: { "Content-Type": "multipart/form-data" },
         maxBodyLength: 25 * 1024 * 1024,
       });
 
@@ -213,28 +221,28 @@ function App() {
                       <p className="text-slate-600">PDF or DOCX files supported</p>
                       <p className="text-sm text-slate-500 mt-1">Or drag and drop a file here</p>
                     </div>
-
                     {/* Hidden input + visible buttons */}
                     <input
+                      ref={fileInputRef}
                       id="resume-upload"
                       type="file"
                       accept=".pdf,.docx,.doc"
                       onChange={onFileChange}
                       className="hidden"
                     />
-
                     <div className="flex items-center gap-3">
-                      <label htmlFor="resume-upload">
-                        <Button size="lg" variant="outline" className="cursor-pointer">
+                    
+                        <Button type="button"size="lg"variant="outline"className="cursor-pointer"onClick={() => fileInputRef.current?.click()}>
                           Select File
                         </Button>
-                      </label>
+                      
 
                       <Button
-                        size="lg"
-                        onClick={handleFileUpload}
-                        disabled={!selectedFile || loadingUpload}
-                        className="cursor-pointer"
+                      type="button"
+                      size="lg"
+                      onClick={handleFileUpload}
+                      disabled={!selectedFile || loadingUpload}
+                      className="cursor-pointer"
                       >
                         {loadingUpload ? (
                           <>
