@@ -44,7 +44,8 @@ api = APIRouter(prefix="/api")
 # Production origin(s)
 DEFAULT_ORIGINS = [
     "http://localhost:3000",
-    # add your exact Vercel domain here (no trailing slash, no querystring):
+    "https://app-2qwezbwot-aftab-pathans-projects-9c06d6e7.vercel.app",  # your current preview
+    "https://app-b11ccjv21-aftab-pathans-projects-9c06d6e7.vercel.app",
     "https://app-bhpgotxca-aftab-pathans-projects-9c06d6e7.vercel.app",
 ]
 
