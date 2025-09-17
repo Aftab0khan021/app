@@ -13,11 +13,13 @@ def get_client() -> AsyncIOMotorClient:
     if _client is None:
         if not MONGO_URL:
             raise RuntimeError("MONGO_URL environment variable is not set")
+        # ✅ use TLS only for SRV/Atlas-style URLs
+        use_tls = MONGO_URL.startswith("mongodb+srv://")
         _client = AsyncIOMotorClient(
             MONGO_URL,
             serverSelectionTimeoutMS=5000,
             maxPoolSize=10,
-            tls=True,  # works for Atlas SRV strings; if you use local Mongo, set tls=False
+            tls=use_tls,
         )
     return _client
 

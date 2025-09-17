@@ -20,13 +20,20 @@ import { Progress } from "./components/ui/progress";
 import { Badge } from "./components/ui/badge";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL; // e.g. https://ai-resume-checker-f4xs.onrender.com
+const BACKEND_ROOT = BACKEND_URL 
+  .replace(/\/+$/g, "")       // remove trailing slashes
+  .replace(/\/api$/i, "");    // remove trailing /api if someone set it by mistake
+
+if (!BACKEND_ROOT) {
+  console.error("REACT_APP_BACKEND_URL is missing. Set it to your backend root (no /api).");
+}
 
 // Single axios client for all calls
 const api = axios.create({
-  baseURL: `${BACKEND_URL}/api`,
+  baseURL: `${BACKEND_ROOT}/api`,
   timeout: 20000,
 });
-
+console.log("API base:", api.defaults.baseURL);
 // Auto-retry once if Render free dyno is waking (503)
 api.interceptors.response.use(
   (r) => r,
