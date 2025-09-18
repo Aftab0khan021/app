@@ -82,6 +82,6 @@ module.exports = {
     'w-full','max-w-[1120px]','sm:w-auto','mx-auto','px-4','sm:px-6',
     'grid-cols-1','sm:grid-cols-2','md:grid-cols-2',
     'p-4','sm:p-6','md:p-8',
-    'hidden','block','flex','flex-col','sm:flex-row','gap-3',
+    'hidden','block','flex','flex-col','sm:flex-row','gap-3','lg:col-span-2',
   ]
 };
