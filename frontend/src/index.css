@@ -125,3 +125,26 @@ table {
   width: 100%;
   overflow-x: auto;
 }
+@media (max-width: 640px) {
+  /* Force grids to single column on small screens */
+  .grid { grid-template-columns: 1fr !important; }
+
+  /* Make every flex row allow wrapping on phones */
+  .flex { flex-wrap: wrap !important; }
+
+  /* Form controls full width for tap comfort */
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  select,
+  textarea,
+  input[type="text"],
+  input[type="email"],
+  input[type="file"],
+  input[type="number"],
+  input[type="password"] {
+    width: 100%;
+    max-width: 100%;
+  }
+}

@@ -150,12 +150,12 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-wrap items-center gap-3">
             <div className="p-2 bg-indigo-600 rounded-lg">
               <Brain className="w-6 h-6 text-white" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h1 className="text-xl font-bold text-slate-900">AI Resume Matcher</h1>
               <p className="text-sm text-slate-600">Smart Resume & Job Description Analysis</p>
             </div>
@@ -163,9 +163,9 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-8 bg-white/60 p-2 rounded-xl backdrop-blur-sm">
+        <div className="flex flex-wrap gap-2 mb-8 bg-white/60 p-2 rounded-xl backdrop-blur-sm">
           <Button
             variant={activeTab === "upload" ? "default" : "ghost"}
             onClick={() => setActiveTab("upload")}
@@ -208,7 +208,7 @@ function App() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div
-                  className="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors"
+                  className="border-2 border-dashed border-indigo-300 rounded-xl p-6 sm:p-8 text-center hover:border-indigo-400 transition-colors"
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
                 >
@@ -316,7 +316,7 @@ function App() {
 
         {/* Analysis Tab */}
         {activeTab === "analyze" && (
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -412,7 +412,7 @@ function App() {
               </CardContent>
             </Card>
 
-            <div className="grid lg:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               {/* Matched Skills */}
               <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
                 <CardHeader>
