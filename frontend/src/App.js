@@ -502,7 +502,7 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-8 mt-16">
-        <div className="max-w-6xl mx-auto px-6 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Brain className="w-5 h-5 text-indigo-400" />
             <span className="font-semibold">AI Resume Matcher</span>

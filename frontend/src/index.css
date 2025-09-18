@@ -148,3 +148,21 @@ table {
     max-width: 100%;
   }
 }
+/* --- Mobile button wrapping & flex child shrink --- */
+@media (max-width: 640px) {
+  /* Shadcn Button typically sets whitespace-nowrap; break on small screens */
+  button { 
+    white-space: normal !important; 
+    word-break: break-word;
+  }
+
+  /* Flex rows ke bachche shrink/line-wrap kar saken */
+  .flex > * { 
+    min-width: 0; 
+  }
+}
+/* --- Safe areas for phones with notches --- */
+@supports (padding: max(0px)) {
+  header { padding-top: max(0.5rem, env(safe-area-inset-top)); }
+  footer { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+}
