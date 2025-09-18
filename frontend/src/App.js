@@ -169,7 +169,7 @@ function App() {
           <Button
             variant={activeTab === "upload" ? "default" : "ghost"}
             onClick={() => setActiveTab("upload")}
-            className="flex-1 gap-2"
+            className="w-full sm:flex-1 gap-2"
           >
             <Upload className="w-4 h-4" />
             Upload Resume
@@ -177,7 +177,7 @@ function App() {
           <Button
             variant={activeTab === "analyze" ? "default" : "ghost"}
             onClick={() => setActiveTab("analyze")}
-            className="flex-1 gap-2"
+            className="w-full sm:flex-1 gap-2"
           >
             <Target className="w-4 h-4" />
             Analyze Match
@@ -185,7 +185,7 @@ function App() {
           <Button
             variant={activeTab === "results" ? "default" : "ghost"}
             onClick={() => setActiveTab("results")}
-            className="flex-1 gap-2"
+            className="w-full sm:flex-1 gap-2"
             disabled={!analysis}
           >
             <BarChart3 className="w-4 h-4" />
@@ -230,9 +230,8 @@ function App() {
                       onChange={onFileChange}
                       className="hidden"
                     />
-                    <div className="flex items-center gap-3">
-                    
-                        <Button type="button"size="lg"variant="outline"className="cursor-pointer"onClick={() => fileInputRef.current?.click()}>
+                    <div className="flex flex-wrap items-stretch gap-3">
+                        <Button type="button"size="lg"variant="outline"className="cursor-pointer w-full sm:w-auto"onClick={() => fileInputRef.current?.click()}>
                           Select File
                         </Button>
                       
@@ -242,7 +241,7 @@ function App() {
                       size="lg"
                       onClick={handleFileUpload}
                       disabled={!selectedFile || loadingUpload}
-                      className="cursor-pointer"
+                      className="cursor-pointer w-full sm:w-auto"
                       >
                         {loadingUpload ? (
                           <>
@@ -299,7 +298,7 @@ function App() {
                         value={resumeText}
                         onChange={(e) => setResumeText(e.target.value)}
                         placeholder="Paste your resume text here..."
-                        className="min-h-32 resize-none"
+                        className="min-h-40 sm:min-h-52 md:min-h-64 resize-y"
                       />
                       {resumeText && (
                         <Button onClick={() => setActiveTab("analyze")} className="w-full gap-2 mt-3" size="lg">
@@ -330,7 +329,7 @@ function App() {
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
                   placeholder="Your resume text will appear here..."
-                  className="min-h-72 resize-none"
+                  className="min-h-60 sm:min-h-72 resize-y"
                 />
               </CardContent>
             </Card>
@@ -347,7 +346,7 @@ function App() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the job description here..."
-                  className="min-h-72 resize-none"
+                  className="min-h-60 sm:min-h-72 resize-y"
                 />
               </CardContent>
             </Card>
@@ -476,7 +475,7 @@ function App() {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
               <Button
                 onClick={() => {
                   setActiveTab("upload");
@@ -487,12 +486,12 @@ function App() {
                 }}
                 variant="outline"
                 size="lg"
-                className="gap-2"
+                className="gap-2 w-full sm:w-auto"
               >
                 <Upload className="w-4 h-4" />
                 New Analysis
               </Button>
-              <Button onClick={() => window.print()} size="lg" className="gap-2">
+              <Button onClick={() => window.print()} size="lg" className="gap-2 w-full sm:w-auto">
                 <Download className="w-4 h-4" />
                 Export Results
               </Button>

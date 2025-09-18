@@ -330,7 +330,8 @@ function App() {
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
                   placeholder="Your resume text will appear here..."
-                  className="min-h-72 resize-none"
+                  className="min-h-60 sm:min-h-72 resize-y"
+
                 />
               </CardContent>
             </Card>
@@ -347,7 +348,8 @@ function App() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the job description here..."
-                  className="min-h-72 resize-none"
+                  className="min-h-60 sm:min-h-72 resize-y"
+
                 />
               </CardContent>
             </Card>
