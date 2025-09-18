@@ -11,7 +11,6 @@ from typing import List, Dict, Any
 from fastapi import FastAPI, APIRouter, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-
 import nltk
 import PyPDF2
 import docx
@@ -20,9 +19,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from app.db import get_db  # <- our fixed db helper
 
-# ----------------------------
-# NLTK bootstrap (only if missing)
-# ----------------------------
 try:
     nltk.data.find("tokenizers/punkt")
 except LookupError:
@@ -32,16 +28,9 @@ try:
 except LookupError:
     nltk.download("stopwords")
 
-# ----------------------------
-# App + Router
-# ----------------------------
 app = FastAPI(title="AI Resume & Job Matcher API")
 api = APIRouter(prefix="/api")
 
-# ----------------------------
-# CORS
-# ----------------------------
-# Production origin(s)
 DEFAULT_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
@@ -55,9 +44,9 @@ if _extra:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https://app(?:-[a-z0-9]+)?-aftab-pathans-projects-9c06d6e7\.vercel\.app$",
+    allow_origin_regex=r"^https://app(?:-[a-z0-9]+)*-aftab-pathans-projects-9c06d6e7\.vercel\.app$",
     # Optional: also allow localhost for local dev
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=DEFAULT_ORIGINS + ["http://127.0.0.1:3000"],
     allow_credentials=True,          # keep True if you ever use cookies; otherwise False is also fine
     allow_methods=["*"],
     allow_headers=["*"],

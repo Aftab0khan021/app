@@ -84,3 +84,44 @@ code {
     @apply bg-background text-foreground;
     }
 }
+/* Make media scale within containers */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Avoid layout shift with long words on small screens */
+* {
+  word-break: break-word;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+/* --- Responsive Safe Patch (append at the very end of index.css) --- */
+
+/* Prevent accidental horizontal scroll and keep text sizing sane on mobile */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Long snippets don't break layout on small screens */
+pre, code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Tables stay usable on narrow screens (no content loss) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table-responsive,
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
