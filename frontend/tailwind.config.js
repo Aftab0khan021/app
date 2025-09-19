@@ -78,7 +78,7 @@ module.exports = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
-  safelist: [
+ /* safelist: [
     // --- Keep your explicit class list (good!):
     'min-h-screen','max-w-6xl','mx-auto','w-full','min-w-0',
     'px-4','sm:px-6','py-4','py-8','mt-16','mb-8','gap-2','gap-3','gap-4','gap-6','space-y-3','space-y-4','items-stretch',
@@ -109,14 +109,12 @@ module.exports = {
     'border-white','border-t-transparent',
     'text-white',
     'sm:w-auto','sm:flex-row','md:grid-cols-2','lg:col-span-2', 
-
-    // --- NEW: Regex patterns to preserve responsive & utility families:
-    // All responsive prefixes (sm:, md:, lg:, xl:)
-    { pattern: /(sm:|md:|lg:|xl:).*/ },
-    // Common utility families you use across the app
+    pattern: /(sm:|md:|lg:|xl:). },
     { pattern: /^(flex|grid|col-span|row-span|items-|justify-|content-|place-)/ },
     { pattern: /^(w|h|min-w|min-h|max-w|max-h|p|px|py|m|mx|my|gap|space-[xy])-.*$/ },
     { pattern: /^(text|bg|from|via|to|border|ring|shadow|rounded)-.*$/ },
     { pattern: /^justify-(start|end|center|between|around)$/ },
-  ],
+  ],*/
+  // tailwind.config.js
+safelist: [{ pattern: /.*/ }],
 };
