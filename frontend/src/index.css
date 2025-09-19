@@ -166,3 +166,9 @@ table {
   header { padding-top: max(0.5rem, env(safe-area-inset-top)); }
   footer { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 }
+/* --- Force the main container full-width on phones --- */
+@media (max-width: 640px) {
+  .max-w-6xl { max-width: 100% !important; }
+  .mx-auto { margin-left: 0 !important; margin-right: 0 !important; }
+  #root, body, html { width: 100% !important; max-width: 100% !important; }
+}
