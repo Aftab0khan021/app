@@ -4,7 +4,9 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { ArrowRight, ExternalLink, Github, Eye } from 'lucide-react';
-import { projects } from '../../data/mock';
+import { useProjects } from '../../hooks/useApi';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorMessage from '../common/ErrorMessage';
 
 const ProjectsPreview = () => {
   const [visibleProjects, setVisibleProjects] = useState([]);
