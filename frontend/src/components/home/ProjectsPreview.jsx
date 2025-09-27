@@ -10,14 +10,21 @@ import ErrorMessage from '../common/ErrorMessage';
 
 const ProjectsPreview = () => {
   const [visibleProjects, setVisibleProjects] = useState([]);
-  const featuredProjects = projects.slice(0, 2);
+  const { data: projects, loading, error } = useProjects();
+  const featuredProjects = projects ? projects.slice(0, 2) : [];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisibleProjects(featuredProjects);
-    }, 200);
-    return () => clearTimeout(timer);
-  }, []);
+    if (projects && projects.length > 0) {
+      const timer = setTimeout(() => {
+        setVisibleProjects(featuredProjects);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [projects]);
+
+  if (loading) return <LoadingSpinner size="lg" text="Loading projects..." />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!projects || projects.length === 0) return null;
 
   return (
     <section className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden">
