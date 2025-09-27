@@ -12,7 +12,9 @@ import {
   ExternalLink,
   Sparkles
 } from 'lucide-react';
-import { personalInfo } from '../../data/mock';
+import { usePersonalInfo } from '../../hooks/useApi';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorMessage from '../common/ErrorMessage';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
