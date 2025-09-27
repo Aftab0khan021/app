@@ -41,8 +41,8 @@ MOCK_DATA = {
             ],
             "category": "Full-Stack Web Application",
             "status": "completed",
-            "start_date": date(2024, 4, 1),
-            "end_date": date(2024, 6, 30)
+            "start_date": "2024-04-01",
+            "end_date": "2024-06-30"
         },
         {
             "title": "AI-Resume-Analyser",
