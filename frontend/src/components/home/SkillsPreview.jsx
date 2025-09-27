@@ -4,7 +4,9 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { ArrowRight, Code, Database, Cloud, Cpu, Palette, Globe } from 'lucide-react';
-import { skills } from '../../data/mock';
+import { useSkills } from '../../hooks/useApi';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorMessage from '../common/ErrorMessage';
 
 const SkillsPreview = () => {
   const [isVisible, setIsVisible] = useState(false);
