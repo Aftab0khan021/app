@@ -20,6 +20,8 @@ const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentWord, setCurrentWord] = useState(0);
   const words = ['Software Engineer', 'Full-Stack Developer', 'Problem Solver', 'Tech Enthusiast'];
+  
+  const { data: personalInfo, loading, error } = usePersonalInfo();
 
   useEffect(() => {
     setIsVisible(true);
@@ -28,6 +30,10 @@ const Hero = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  if (loading) return <LoadingSpinner size="xl" text="Loading profile..." />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!personalInfo) return null;
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-blue-900/10 dark:to-purple-900/10">
