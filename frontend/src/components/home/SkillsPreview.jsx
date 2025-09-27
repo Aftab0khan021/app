@@ -51,25 +51,31 @@ const SkillsPreview = () => {
   const skillCategories = getSkillCategories();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-      // Animate skill levels
-      setTimeout(() => {
-        const animated = {};
-        skillCategories.forEach((category, categoryIndex) => {
-          category.skills.forEach((skill, skillIndex) => {
-            setTimeout(() => {
-              setAnimatedSkills(prev => ({
-                ...prev,
-                [`${categoryIndex}-${skillIndex}`]: category.levels[skillIndex] || 0
-              }));
-            }, (categoryIndex * 100) + (skillIndex * 150));
+    if (skills?.technical) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+        // Animate skill progress bars
+        setTimeout(() => {
+          const animated = {};
+          skillCategories.forEach((category, categoryIndex) => {
+            category.skills.forEach((skill, skillIndex) => {
+              setTimeout(() => {
+                setAnimatedSkills(prev => ({
+                  ...prev,
+                  [`${categoryIndex}-${skillIndex}`]: category.levels[skillIndex] || 0
+                }));
+              }, (categoryIndex * 100) + (skillIndex * 150));
+            });
           });
-        });
-      }, 500);
-    }, 200);
-    return () => clearTimeout(timer);
-  }, []);
+        }, 500);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [skills]);
+
+  if (loading) return <LoadingSpinner size="lg" text="Loading skills..." />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!skills) return null;
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800 relative overflow-hidden">
