@@ -71,7 +71,7 @@ const ProjectsPreview = () => {
                     className="bg-white/90 text-gray-900 hover:bg-white shadow-lg"
                     asChild
                   >
-                    <Link to={`/projects/${project.id}`}>
+                    <Link to={`/projects/${project._id || project.id}`}>
                       <Eye className="h-4 w-4 mr-2" />
                       View Details
                     </Link>
