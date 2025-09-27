@@ -111,7 +111,7 @@ const ProjectsPreview = () => {
                   {/* External Links */}
                   <div className="flex space-x-2">
                     <a
-                      href={project.githubUrl}
+                      href={project.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
@@ -119,7 +119,7 @@ const ProjectsPreview = () => {
                       <Github className="h-5 w-5" />
                     </a>
                     <a
-                      href={project.liveUrl}
+                      href={project.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-blue-600 transition-colors duration-300"
