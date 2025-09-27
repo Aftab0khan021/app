@@ -122,11 +122,12 @@ const SkillsPreview = () => {
                   {category.skills.map((skill, skillIndex) => {
                     const skillKey = `${categoryIndex}-${skillIndex}`;
                     const level = animatedSkills[skillKey] || 0;
+                    const skillName = typeof skill === 'string' ? skill : skill.name;
                     return (
-                      <div key={skill} className="space-y-2">
+                      <div key={skillName} className="space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {skill}
+                            {skillName}
                           </span>
                           <span className="text-xs text-gray-500 dark:text-gray-400">
                             {level}%
