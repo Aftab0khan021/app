@@ -82,7 +82,7 @@ const ProjectsPreview = () => {
                     className="bg-white/90 border-white text-gray-900 hover:bg-white"
                     asChild
                   >
-                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={project.live_url} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Live Demo
                     </a>
