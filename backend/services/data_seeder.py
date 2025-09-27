@@ -67,8 +67,8 @@ MOCK_DATA = {
             ],
             "category": "AI/ML Web Application",
             "status": "completed",
-            "start_date": date(2024, 1, 1),
-            "end_date": date(2024, 3, 31)
+            "start_date": "2024-01-01",
+            "end_date": "2024-03-31"
         }
     ],
     "experiences": [
