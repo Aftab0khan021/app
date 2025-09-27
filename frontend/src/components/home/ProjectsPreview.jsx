@@ -154,7 +154,7 @@ const ProjectsPreview = () => {
                 </div>
 
                 {/* View Project Button */}
-                <Link to={`/projects/${project.id}`}>
+                <Link to={`/projects/${project._id || project.id}`}>
                   <Button 
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white group/btn transition-all duration-300"
                   >
