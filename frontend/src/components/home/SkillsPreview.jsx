@@ -150,7 +150,7 @@ const SkillsPreview = () => {
         <div className={`text-center mb-12 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Soft Skills</h3>
           <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-            {skills.soft.map((skill, index) => (
+            {(skills.soft || []).map((skill, index) => (
               <Badge
                 key={skill}
                 className={`px-4 py-2 text-sm bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-800 dark:text-gray-200 hover:scale-105 transition-transform duration-200 animate-bounce-in`}
