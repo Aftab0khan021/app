@@ -11,37 +11,44 @@ import ErrorMessage from '../common/ErrorMessage';
 const SkillsPreview = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [animatedSkills, setAnimatedSkills] = useState({});
+  const { data: skills, loading, error } = useSkills();
 
-  const skillCategories = [
-    {
-      name: 'Programming Languages',
-      icon: Code,
-      color: 'from-blue-500 to-cyan-500',
-      skills: skills.technical['Programming Languages'],
-      levels: [90, 85, 80]
-    },
-    {
-      name: 'Web Technologies',
-      icon: Globe,
-      color: 'from-green-500 to-emerald-500',
-      skills: skills.technical['Web Technologies'].slice(0, 3),
-      levels: [95, 90, 85]
-    },
-    {
-      name: 'Cloud & DevOps',
-      icon: Cloud,
-      color: 'from-purple-500 to-pink-500',
-      skills: skills.technical['Cloud & DevOps'].slice(0, 3),
-      levels: [80, 75, 70]
-    },
-    {
-      name: 'Databases',
-      icon: Database,
-      color: 'from-orange-500 to-red-500',
-      skills: skills.technical['Databases'],
-      levels: [85, 80]
-    }
-  ];
+  const getSkillCategories = () => {
+    if (!skills?.technical) return [];
+    
+    return [
+      {
+        name: 'Programming Languages',
+        icon: Code,
+        color: 'from-blue-500 to-cyan-500',
+        skills: skills.technical['Programming Languages']?.slice(0, 3) || [],
+        levels: skills.technical['Programming Languages']?.slice(0, 3).map(s => s.level) || [90, 85, 80]
+      },
+      {
+        name: 'Web Technologies',
+        icon: Globe,
+        color: 'from-green-500 to-emerald-500',
+        skills: skills.technical['Web Technologies']?.slice(0, 3) || [],
+        levels: skills.technical['Web Technologies']?.slice(0, 3).map(s => s.level) || [95, 90, 85]
+      },
+      {
+        name: 'Cloud & DevOps',
+        icon: Cloud,
+        color: 'from-purple-500 to-pink-500',
+        skills: skills.technical['Cloud & DevOps']?.slice(0, 3) || [],
+        levels: skills.technical['Cloud & DevOps']?.slice(0, 3).map(s => s.level) || [80, 75, 70]
+      },
+      {
+        name: 'Databases',
+        icon: Database,
+        color: 'from-orange-500 to-red-500',
+        skills: skills.technical['Databases'] || [],
+        levels: skills.technical['Databases']?.map(s => s.level) || [85, 80]
+      }
+    ];
+  };
+
+  const skillCategories = getSkillCategories();
 
   useEffect(() => {
     const timer = setTimeout(() => {
