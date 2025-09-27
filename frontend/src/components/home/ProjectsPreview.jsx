@@ -132,7 +132,7 @@ const ProjectsPreview = () => {
 
               <CardContent>
                 <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                  {project.shortDescription}
+                  {project.short_description}
                 </p>
 
                 {/* Technologies */}
