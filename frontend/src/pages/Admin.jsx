@@ -20,17 +20,35 @@ const Admin = () => {
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [errorProjects, setErrorProjects] = useState('');
 
+  // ✅ added state for skills
+  const [skills, setSkills] = useState([]);
+  const [loadingSkills, setLoadingSkills] = useState(false);
+  const [errorSkills, setErrorSkills] = useState('');
+
   useEffect(() => {
     if (activeTab === 'projects') {
       setLoadingProjects(true);
       setErrorProjects('');
-        (api.admin?.getProjects ?? api.getProjects)()
+      (api.admin?.getProjects ?? api.getProjects)()
         .then((res) => setProjects(Array.isArray(res.data) ? res.data : []))
         .catch((err) => {
           console.error('Projects fetch error', err);
           setErrorProjects('Failed to load projects');
         })
         .finally(() => setLoadingProjects(false));
+    }
+
+    // ✅ fetch skills when skills tab is active
+    if (activeTab === 'skills') {
+      setLoadingSkills(true);
+      setErrorSkills('');
+      (api.admin?.getSkills ?? api.getSkills)()
+        .then((res) => setSkills(Array.isArray(res.data) ? res.data : []))
+        .catch((err) => {
+          console.error('Skills fetch error', err);
+          setErrorSkills('Failed to load skills');
+        })
+        .finally(() => setLoadingSkills(false));
     }
   }, [activeTab]);
 
@@ -46,7 +64,7 @@ const Admin = () => {
   const stats = [
     { label: 'Total Projects', value: String(projects.length || 0), change: '', color: 'text-blue-600' },
     { label: 'Blog Posts', value: '0', change: '', color: 'text-green-600' },
-    { label: 'Skills', value: '—', change: '', color: 'text-purple-600' },
+    { label: 'Skills', value: String(skills.length || 0), change: '', color: 'text-purple-600' }, // ✅ show real count
     { label: 'Experience', value: '—', change: '', color: 'text-orange-600' },
   ];
 
@@ -193,7 +211,6 @@ const Admin = () => {
                                       {p.updated_at ? new Date(p.updated_at).toLocaleString() : ''}
                                     </div>
                                   </div>
-                                  {/* placeholders for future edit/delete actions */}
                                   <div className="flex items-center gap-2">
                                     <Button size="sm" variant="secondary">Edit</Button>
                                     <Button size="sm" variant="destructive">Delete</Button>
@@ -214,8 +231,32 @@ const Admin = () => {
                   )}
 
                   {activeTab === 'skills' && (
-                    <div className="p-2">
-                      <p className="text-gray-500">Skills manager stub — hook this to /api/admin/skills endpoints.</p>
+                    <div className="space-y-4">
+                      {loadingSkills && <p className="text-gray-500">Loading skills…</p>}
+                      {errorSkills && <p className="text-red-500">{errorSkills}</p>}
+
+                      {!loadingSkills && !errorSkills && (
+                        <>
+                          {skills.length === 0 ? (
+                            <p className="text-gray-500">No skills found.</p>
+                          ) : (
+                            <ul className="divide-y">
+                              {skills.map((s) => (
+                                <li key={s._id} className="flex items-center justify-between py-3">
+                                  <div>
+                                    <div className="font-medium">{s.name}</div>
+                                    <div className="text-xs opacity-70">{s.level || ''}</div>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Button size="sm" variant="secondary">Edit</Button>
+                                    <Button size="sm" variant="destructive">Delete</Button>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </>
+                      )}
                     </div>
                   )}
 

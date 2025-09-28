@@ -30,43 +30,26 @@ apiClient.interceptors.response.use(
 // API endpoints
 export const api = {
   // Public
-  getPersonalInfo: () => apiClient.get('/personal'),
-
-  // Projects (public read)
+   getPersonalInfo: () => apiClient.get('/personal'),
   getProjects: () => apiClient.get('/projects'),
   getProjectById: (id) => apiClient.get(`/projects/${id}`),
   getFeaturedProjects: () => apiClient.get('/projects/featured'),
-
-  // Experience
   getExperience: () => apiClient.get('/experience'),
-
-  // Skills
   getSkills: () => apiClient.get('/skills'),
-
-  // Education
   getEducation: () => apiClient.get('/education'),
-
-  // Certifications
   getCertifications: () => apiClient.get('/certifications'),
-
-  // Blog
   getBlogPosts: (limit) => apiClient.get(`/blog${limit ? `?limit=${limit}` : ''}`),
   getBlogPostBySlug: (slug) => apiClient.get(`/blog/${slug}`),
   getFeaturedBlogPosts: () => apiClient.get('/blog/featured'),
-
-  // Testimonials
   getTestimonials: () => apiClient.get('/testimonials'),
-
-  // Contact
   submitContactMessage: (data) => apiClient.post('/contact', data),
-
   // Admin endpoints
   admin: {
     // Personal
-    updatePersonalInfo: (data) => apiClient.put('/admin/personal', data),
+updatePersonalInfo: (data) => apiClient.put('/admin/personal', data),
 
     // Projects
-    getProjects: () => apiClient.get('/admin/projects'), // ✅ FIX ADDED
+    getProjects: () => apiClient.get('/admin/projects'),
     createProject: (data) => apiClient.post('/admin/projects', data),
     updateProject: (id, data) => apiClient.put(`/admin/projects/${id}`, data),
     deleteProject: (id) => apiClient.delete(`/admin/projects/${id}`),
@@ -77,6 +60,7 @@ export const api = {
     deleteExperience: (id) => apiClient.delete(`/admin/experience/${id}`),
 
     // Skills
+    getSkills: () => apiClient.get('/admin/skills'),      // ← ✅ added
     createSkill: (data) => apiClient.post('/admin/skills', data),
     updateSkill: (id, data) => apiClient.put(`/admin/skills/${id}`, data),
     deleteSkill: (id) => apiClient.delete(`/admin/skills/${id}`),
