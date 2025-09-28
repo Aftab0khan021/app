@@ -1,3 +1,4 @@
+// src/pages/Admin.jsx
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
@@ -16,11 +17,13 @@ import {
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Projects state
   const [projects, setProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [errorProjects, setErrorProjects] = useState('');
 
-  // ✅ added state for skills
+  // Skills state
   const [skills, setSkills] = useState([]);
   const [loadingSkills, setLoadingSkills] = useState(false);
   const [errorSkills, setErrorSkills] = useState('');
@@ -38,11 +41,11 @@ const Admin = () => {
         .finally(() => setLoadingProjects(false));
     }
 
-    // ✅ fetch skills when skills tab is active
+    // ✅ FIX: use PUBLIC skills endpoint so it works even without /api/admin/skills
     if (activeTab === 'skills') {
       setLoadingSkills(true);
       setErrorSkills('');
-      (api.admin?.getSkills ?? api.getSkills)()
+      api.getSkills()
         .then((res) => setSkills(Array.isArray(res.data) ? res.data : []))
         .catch((err) => {
           console.error('Skills fetch error', err);
@@ -64,7 +67,7 @@ const Admin = () => {
   const stats = [
     { label: 'Total Projects', value: String(projects.length || 0), change: '', color: 'text-blue-600' },
     { label: 'Blog Posts', value: '0', change: '', color: 'text-green-600' },
-    { label: 'Skills', value: String(skills.length || 0), change: '', color: 'text-purple-600' }, // ✅ show real count
+    { label: 'Skills', value: String(skills.length || 0), change: '', color: 'text-purple-600' },
     { label: 'Experience', value: '—', change: '', color: 'text-orange-600' },
   ];
 
