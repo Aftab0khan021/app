@@ -18,12 +18,11 @@ async def get_database():
     return database.database
 
 async def connect_to_mongo():
-    """Create database connection"""
-    mongo_url = os.environ.get('MONGO_URL')
+    mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+    db_name = os.environ.get('DB_NAME', 'portfolio')
     database.client = AsyncIOMotorClient(mongo_url)
-    database.database = database.client.portfolio_db
-    print(f"Connected to MongoDB at {mongo_url}")
-
+    database.database = database.client[db_name]
+    print(f"Connected to MongoDB at {mongo_url}, DB: {db_name}")
 async def close_mongo_connection():
     """Close database connection"""
     if database.client:
