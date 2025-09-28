@@ -1,3 +1,5 @@
+import api from '../services/api';
+import { useEffect } from 'react';
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -17,6 +19,15 @@ import {
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [projects, setProjects] = useState([]);
+
+useEffect(() => {
+  if (activeTab === 'projects') {
+    api.admin.getProjects()
+      .then(res => setProjects(res.data))
+      .catch(err => console.error('Projects fetch error', err));
+  }
+}, [activeTab]);
 
   const adminSections = [
     {
@@ -190,37 +201,55 @@ const Admin = () => {
             )}
 
             {activeTab !== 'overview' && (
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-gray-900 dark:text-white flex items-center">
-                    {adminSections.find(s => s.id === activeTab)?.icon && 
-                      React.createElement(adminSections.find(s => s.id === activeTab).icon, { className: "h-6 w-6 mr-3" })
-                    }
-                    {adminSections.find(s => s.id === activeTab)?.name}
-                  </CardTitle>
-                  <CardDescription>
-                    {adminSections.find(s => s.id === activeTab)?.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-20">
-                    <div className="text-gray-400 dark:text-gray-600 mb-4">
-                      <Settings className="h-16 w-16 mx-auto mb-4" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                      Admin Panel Coming Soon
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                      This section will be available once the backend is implemented. 
-                      You'll be able to manage your {activeTab} content here.
-                    </p>
-                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-                      Backend Integration Required
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+  <Card className="border-0 shadow-lg">
+    <CardHeader>
+      <CardTitle className="text-2xl text-gray-900 dark:text-white flex items-center">
+        {adminSections.find(s => s.id === activeTab)?.icon && 
+          React.createElement(adminSections.find(s => s.id === activeTab).icon, { className: "h-6 w-6 mr-3" })
+        }
+        {adminSections.find(s => s.id === activeTab)?.name}
+      </CardTitle>
+      <CardDescription>
+        {adminSections.find(s => s.id === activeTab)?.description}
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      {activeTab === 'projects' ? (
+        <div>
+          {projects.length === 0 ? (
+            <p className="text-gray-500">No projects found.</p>
+          ) : (
+            <ul className="space-y-2">
+              {projects.map((p) => (
+                <li key={p._id} className="flex justify-between border-b py-2">
+                  <span>{p.title}</span>
+                  <span className="text-xs opacity-70">{p.updated_at}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <div className="text-gray-400 dark:text-gray-600 mb-4">
+            <Settings className="h-16 w-16 mx-auto mb-4" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Admin Panel Coming Soon
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+            This section will be available once the backend is implemented. 
+            You'll be able to manage your {activeTab} content here.
+          </p>
+          <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+            Backend Integration Required
+          </Badge>
+        </div>
+      )}
+    </CardContent>
+  </Card>
+)}
+
           </div>
         </div>
       </div>
