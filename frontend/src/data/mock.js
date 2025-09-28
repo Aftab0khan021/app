@@ -7,7 +7,7 @@ export const personalInfo = {
   email: "paftab320@gmail.com",
   phone: "+91 7089036313",
   linkedin: "https://linkedin.com/in/aftab-khan-389282285",
-  github: "https://github.com/aftabpathan",
+  github: "https://github.com/Aftab0khan021",
   bio: "Passionate software engineer with a strong foundation in computer science and hands-on experience in building clean, efficient, and user-centric software solutions. Currently pursuing B-Tech with expertise in full-stack development and cloud technologies.",
   avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
   resume: "/resume-aftab-pathan.pdf"
@@ -65,7 +65,7 @@ export const projects = [
       "https://images.unsplash.com/photo-1503252947848-7338d3f92f31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHx3ZWIlMjBhcHBsaWNhdGlvbiUyMG1vY2t1cHxlbnwwfHx8fDE3NTg5ODAxNDB8MA&ixlib=rb-4.1.0&q=85"
     ],
     liveUrl: "https://cab-match.vercel.app",
-    githubUrl: "https://github.com/aftabpathan/cab-match",
+    githubUrl: "https://github.com/Aftab0khan021/cab-match",
     technologies: ["React", "FastAPI", "MongoDB Atlas", "JWT", "Maps API", "WebSocket", "Tailwind CSS"],
     features: [
       "Real-time ride tracking with interactive maps",
@@ -92,7 +92,7 @@ export const projects = [
       "https://images.unsplash.com/photo-1601972602237-8c79241e468b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxtb2JpbGUlMjBhcHB8ZW58MHx8fHwxNzU4OTgwMTUwfDA&ixlib=rb-4.1.0&q=85"
     ],
     liveUrl: "https://bit.ly/4ncTTHC",
-    githubUrl: "https://github.com/aftabpathan/ai-resume-analyser",
+    githubUrl: "https://github.com/Aftab0khan021/ai-resume-analyser",
     technologies: ["React", "FastAPI", "MongoDB Atlas", "Python", "AI/ML", "Pandas", "NumPy", "Vercel", "Render"],
     features: [
       "Intelligent resume parsing and text extraction",

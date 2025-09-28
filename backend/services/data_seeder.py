@@ -29,7 +29,7 @@ MOCK_DATA = {
                 "https://images.unsplash.com/photo-1503252947848-7338d3f92f31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHx3ZWIlMjBhcHBsaWNhdGlvbiUyMG1vY2t1cHxlbnwwfHx8fDE3NTg5ODAxNDB8MA&ixlib=rb-4.1.0&q=85"
             ],
             "live_url": "https://cab-match.vercel.app",
-            "github_url": "https://github.com/aftabpathan/cab-match",
+            "github_url": "https://github.com/Aftab0khan021/cab-match",
             "technologies": ["React", "FastAPI", "MongoDB Atlas", "JWT", "Maps API", "WebSocket", "Tailwind CSS"],
             "features": [
                 "Real-time ride tracking with interactive maps",
@@ -55,7 +55,7 @@ MOCK_DATA = {
                 "https://images.unsplash.com/photo-1601972602237-8c79241e468b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxtb2JpbGUlMjBhcHB8ZW58MHx8fHwxNzU4OTgwMTUwfDA&ixlib=rb-4.1.0&q=85"
             ],
             "live_url": "https://bit.ly/4ncTTHC",
-            "github_url": "https://github.com/aftabpathan/ai-resume-analyser",
+            "github_url": "https://github.com/Aftab0khan021/ai-resume-analyser",
             "technologies": ["React", "FastAPI", "MongoDB Atlas", "Python", "AI/ML", "Pandas", "NumPy", "Vercel", "Render"],
             "features": [
                 "Intelligent resume parsing and text extraction",
