@@ -13,7 +13,7 @@ MOCK_DATA = {
         "linkedin": "https://linkedin.com/in/aftab-khan-389282285",
         "github": "https://github.com/Aftab0khan021",
         "bio": "Passionate software engineer with a strong foundation in computer science and hands-on experience in building clean, efficient, and user-centric software solutions. Currently pursuing B-Tech with expertise in full-stack development and cloud technologies.",
-        "avatar": "https://drive.google.com/file/d/1lEn1DImheqfpajgoiBuq11U1hEbHjRPM/view?usp=drive_link",
+        "avatar": "frontend\image\Aftab PAthan.png?usp=drive_link",
         "resume": "/resume-aftab-pathan.pdf",
         "status": "available"
     },
