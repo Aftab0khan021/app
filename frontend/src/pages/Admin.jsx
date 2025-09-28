@@ -24,8 +24,7 @@ const Admin = () => {
     if (activeTab === 'projects') {
       setLoadingProjects(true);
       setErrorProjects('');
-      api.admin
-        .getProjects()
+        (api.admin?.getProjects ?? api.getProjects)()
         .then((res) => setProjects(Array.isArray(res.data) ? res.data : []))
         .catch((err) => {
           console.error('Projects fetch error', err);
