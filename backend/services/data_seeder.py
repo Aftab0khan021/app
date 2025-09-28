@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, timedelta, datetime
 from database import get_collection
 import asyncio
 
@@ -11,7 +11,7 @@ MOCK_DATA = {
         "email": "paftab320@gmail.com",
         "phone": "+91 7089036313",
         "linkedin": "https://linkedin.com/in/aftab-khan-389282285",
-        "github": "https://github.com/aftabpathan",
+        "github": "https://github.com/Aftab0khan021",
         "bio": "Passionate software engineer with a strong foundation in computer science and hands-on experience in building clean, efficient, and user-centric software solutions. Currently pursuing B-Tech with expertise in full-stack development and cloud technologies.",
         "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
         "resume": "/resume-aftab-pathan.pdf",
