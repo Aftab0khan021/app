@@ -18,16 +18,18 @@ import {
 /* ---------------------------------------------------------
    API base + helper
 --------------------------------------------------------- */
-// FIX: Explicitly point to Render backend in production to prevent 404s
-const API_BASE = process.env.NODE_ENV === 'production' 
-  ? "https://portfolio-k4cd.onrender.com" 
-  : "http://localhost:8000";
+// FIX: Hardcoded to Render Backend to guarantee connection and stop "Could not reach" errors
+const API_BASE = "https://portfolio-k4cd.onrender.com";
 
 async function fetchJSON(path, options = {}) {
+  // Ensure we don't double-slash or miss api prefix
+  const endpoint = path.startsWith('/') ? path.slice(1) : path;
+  
   const url =
-    path.startsWith("http") || path.startsWith("/")
+    path.startsWith("http")
       ? path
-      : `${API_BASE}/api/${path}`;
+      : `${API_BASE}/api/${endpoint}`;
+
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {}),

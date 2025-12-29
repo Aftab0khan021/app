@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// FIX: Points to your Render Backend in production
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://portfolio-k4cd.onrender.com/api' 
-  : 'http://localhost:8000/api';
+// FIX: Hardcoded to your LIVE Render Backend to prevent any connection issues
+const API_BASE_URL = 'https://portfolio-k4cd.onrender.com/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -27,7 +25,7 @@ apiClient.interceptors.response.use(
   }
 );
 
-// FIX: Ensure this named export exists for your hooks
+// FIX: Export 'api' as a named constant AND default to fix Vercel build errors
 export const api = {
   // Public Routes
   getPersonalInfo: () => apiClient.get('/personal'),
