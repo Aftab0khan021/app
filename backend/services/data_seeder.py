@@ -156,10 +156,6 @@ async def seed_database():
     # 4. Skills
     skills_collection = await get_collection("skills")
     
-    # Check if we have skills, if not (or to be safe), we can sync them.
-    # For skills, it's often safer to clear and re-insert if you want exact mock data match,
-    # OR we just check if empty. Let's stick to "If empty" for skills to avoid duplicates 
-    # unless you want to implement complex matching logic.
     if await skills_collection.count_documents({}) == 0:
         logger.info("Seeding Skills...")
         skills_data = []
