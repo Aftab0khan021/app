@@ -1,17 +1,15 @@
 import axios from 'axios';
 
-// FIX: Point production URL to your actual Render Backend
+// FIX: Points to your Render Backend in production
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://portfolio-k4cd.onrender.com/api' 
   : 'http://localhost:8000/api';
 
-// Create axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor for auth (future use)
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');
@@ -21,7 +19,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -30,10 +27,9 @@ apiClient.interceptors.response.use(
   }
 );
 
-// API endpoints
-// FIX: This named export 'api' was missing, causing the build failure
+// FIX: Ensure this named export exists for your hooks
 export const api = {
-  // Public
+  // Public Routes
   getPersonalInfo: () => apiClient.get('/personal'),
   getProjects: () => apiClient.get('/projects'),
   getProjectById: (id) => apiClient.get(`/projects/${id}`),
@@ -48,29 +44,24 @@ export const api = {
   getTestimonials: () => apiClient.get('/testimonials'),
   submitContactMessage: (data) => apiClient.post('/contact', data),
   
-  // Admin endpoints
+  // Admin Routes
   admin: {
-    // Personal
     updatePersonalInfo: (data) => apiClient.put('/admin/personal', data),
-
-    // Projects
+    
     getProjects: () => apiClient.get('/admin/projects'),
     createProject: (data) => apiClient.post('/admin/projects', data),
     updateProject: (id, data) => apiClient.put(`/admin/projects/${id}`, data),
     deleteProject: (id) => apiClient.delete(`/admin/projects/${id}`),
 
-    // Experience
     createExperience: (data) => apiClient.post('/admin/experience', data),
     updateExperience: (id, data) => apiClient.put(`/admin/experience/${id}`, data),
     deleteExperience: (id) => apiClient.delete(`/admin/experience/${id}`),
 
-    // Skills
     getSkills: () => apiClient.get('/admin/skills'),
     createSkill: (data) => apiClient.post('/admin/skills', data),
     updateSkill: (id, data) => apiClient.put(`/admin/skills/${id}`, data),
     deleteSkill: (id) => apiClient.delete(`/admin/skills/${id}`),
 
-    // Contact Messages
     getContactMessages: () => apiClient.get('/admin/messages'),
     updateMessageStatus: (id, status) => apiClient.put(`/admin/messages/${id}`, { status }),
   },
