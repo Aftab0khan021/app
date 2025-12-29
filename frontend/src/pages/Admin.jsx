@@ -22,13 +22,13 @@ import {
 const API_BASE = "https://portfolio-k4cd.onrender.com";
 
 async function fetchJSON(path, options = {}) {
-  // Ensure we don't double-slash or miss api prefix
-  const endpoint = path.startsWith('/') ? path.slice(1) : path;
+  // Handle paths that might already have /api or leading slashes
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   
   const url =
     path.startsWith("http")
       ? path
-      : `${API_BASE}/api/${endpoint}`;
+      : `${API_BASE}/api/${cleanPath}`;
 
   const headers = {
     "Content-Type": "application/json",
@@ -45,8 +45,7 @@ async function fetchJSON(path, options = {}) {
   return res.json();
 }
 
-/* ---- MINIMAL FIX 1: add normalizers so delete/update always have id ---- */
-// normalize Mongo docs so they always have .id
+/* ---- Normalizers to ensure IDs exist ---- */
 function normalizeItem(it) {
   if (!it) return it;
   if (!it.id && it._id) it.id = it._id;
@@ -59,7 +58,7 @@ function normalizeList(arr) {
 const uid = () => Math.random().toString(36).slice(2, 9);
 
 /* ---------------------------------------------------------
-   Mock/Data Hybrid switch (persists in localStorage)
+   Mock/Data Hybrid switch
 --------------------------------------------------------- */
 function useHybrid(initialMock) {
   const [mockMode, setMockMode] = useState(() => {
@@ -73,17 +72,10 @@ function useHybrid(initialMock) {
 }
 
 /* ---------------------------------------------------------
-   Seed hydration for EXACT data already on site
-   Order (first found wins):
-   1) localStorage ('portfolio_{key}')
-   2) GET /api/public/{key}
-   3) dynamic import('@/data/seed') or '@/data/mock'
-   4) GET /data/{key}.json
-   5) fallback default
+   Seed hydration
 --------------------------------------------------------- */
 async function tryDynamicImport(path) {
   try {
-    // vite supports this; CRA will just throw and we ignore
     const mod = await import(/* @vite-ignore */ path);
     return mod?.default || mod;
   } catch {
@@ -108,11 +100,11 @@ async function loadSeed(key, fallbackValue) {
     if (readOnly) return readOnly;
   } catch {}
 
-  // 3) optional modules inside repo
+  // 3) optional modules
   const seed = (await tryDynamicImport("@/data/seed")) || (await tryDynamicImport("@/data/mock"));
   if (seed && seed[key] != null) return seed[key];
 
-  // 4) static JSON under public/
+  // 4) static JSON
   try {
     const res = await fetch(`/data/${key}.json`);
     if (res.ok) return await res.json();
@@ -123,8 +115,7 @@ async function loadSeed(key, fallbackValue) {
 }
 
 /* ---------------------------------------------------------
-   Generic CRUD hook with API + fallback to localStorage
-   keys: 'experience' | 'projects' | 'posts' | 'skills' | 'overview'
+   Generic CRUD hook
 --------------------------------------------------------- */
 function useAdminList(key, { mockMode, defaultValue }) {
   const [items, setItems] = useState(defaultValue);
@@ -140,6 +131,7 @@ function useAdminList(key, { mockMode, defaultValue }) {
       setError("");
       try {
         if (!mockMode) {
+          // Live API fetch
           const data = await fetchJSON(`admin/${key}`);
           if (mounted) {
             const normed = Array.isArray(defaultValue)
@@ -148,11 +140,13 @@ function useAdminList(key, { mockMode, defaultValue }) {
             setItems(normed);
           }
         } else {
+          // Mock fetch
           const seed = await loadSeed(key, defaultValue);
           if (mounted) setItems(Array.isArray(defaultValue) ? normalizeList(seed) : normalizeItem(seed));
         }
-      } catch {
-        // fallback to seed
+      } catch (err) {
+        console.error(`Error loading ${key}:`, err);
+        // fallback to seed on error
         const seed = await loadSeed(key, defaultValue);
         if (mounted) setItems(Array.isArray(defaultValue) ? normalizeList(seed) : normalizeItem(seed));
         setError(`Could not reach /api/admin/${key} — using local data.`);
@@ -161,10 +155,9 @@ function useAdminList(key, { mockMode, defaultValue }) {
       }
     })();
     return () => { mounted = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mockMode]);
+  }, [mockMode, key, defaultValue]);
 
-  // persist locally for mock/hybrid
+  // persist locally
   useEffect(() => {
     try {
       localStorage.setItem(`portfolio_${key}`, JSON.stringify(items));
@@ -185,7 +178,6 @@ function useAdminList(key, { mockMode, defaultValue }) {
         if (Array.isArray(items)) {
           setItems((prev) => [normalizeItem(saved), ...prev.filter((p) => p.id !== record.id)]);
         } else {
-          /* ---- MINIMAL FIX 2: ensure saved is normalized here too ---- */
           setItems(normalizeItem(saved));
         }
       }
@@ -242,7 +234,7 @@ function useAdminList(key, { mockMode, defaultValue }) {
 }
 
 /* ---------------------------------------------------------
-   Admin sections meta
+   Admin Sections & Components
 --------------------------------------------------------- */
 const adminSections = [
   { id: "overview",   name: "Overview",   description: "Dashboard overview and analytics", icon: LayoutDashboard },
@@ -253,9 +245,6 @@ const adminSections = [
   { id: "settings",   name: "Settings",   description: "System configuration",             icon: SettingsIcon },
 ];
 
-/* ---------------------------------------------------------
-   EXPERIENCE MANAGER (unchanged logic)
---------------------------------------------------------- */
 function ExperienceManager({ mockMode }) {
   const defaults = [
     { id: uid(), company: "Acme Corp", role: "Frontend Developer", start: "2023-01", end: "2024-06", location: "Remote", description: "Built reusable UI components and optimized performance." },
@@ -318,9 +307,6 @@ function ExperienceManager({ mockMode }) {
   );
 }
 
-/* ---------------------------------------------------------
-   PROJECTS MANAGER
---------------------------------------------------------- */
 function ProjectsManager({ mockMode }) {
   const defaults = [
     { id: uid(), title: "My Portfolio", tagline: "React + Tailwind responsive site", url: "https://example.com", repo: "https://github.com/you/portfolio", tech: ["React","Tailwind"], description: "Clean UI, dark mode, sections for projects/skills/blog." },
@@ -411,9 +397,6 @@ function ProjectsManager({ mockMode }) {
   );
 }
 
-/* ---------------------------------------------------------
-   BLOG MANAGER
---------------------------------------------------------- */
 function BlogManager({ mockMode }) {
   const defaults = [
     { id: uid(), title: "Getting started with my portfolio", slug: "hello-world", date: "2025-01-01", excerpt: "Why I built it and how it works.", content: "Long form content…" },
@@ -476,9 +459,6 @@ function BlogManager({ mockMode }) {
   );
 }
 
-/* ---------------------------------------------------------
-   SKILLS MANAGER
---------------------------------------------------------- */
 function SkillsManager({ mockMode }) {
   const defaults = [
     { id: uid(), name: "JavaScript", level: 90, category: "Frontend" },
@@ -547,9 +527,6 @@ function SkillsManager({ mockMode }) {
   );
 }
 
-/* ---------------------------------------------------------
-   SETTINGS (same behavior as before)
---------------------------------------------------------- */
 function SettingsManager({ mockMode, setMockMode }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -636,9 +613,6 @@ function SettingsManager({ mockMode, setMockMode }) {
   );
 }
 
-/* ---------------------------------------------------------
-   OVERVIEW (simple, pulls read-only metrics list)
---------------------------------------------------------- */
 function OverviewManager({ mockMode }) {
   const defaults = [
     { id: uid(), label: "Total Projects", value: 6 },
@@ -667,14 +641,10 @@ function OverviewManager({ mockMode }) {
           </div>
         )}
       </CardContent>
-      {/* optional: edit inline later if needed */}
     </Card>
   );
 }
 
-/* ---------------------------------------------------------
-   Shared tiny components
---------------------------------------------------------- */
 const Warn = ({ msg }) => (
   <div className="flex items-center gap-2 text-amber-600 mb-4">
     <CloudOff className="h-4 w-4" />
@@ -746,9 +716,6 @@ function Editor({ busy, fields, textField, extra, form, setForm, onChange, onSav
   );
 }
 
-/* ---------------------------------------------------------
-   PAGE
---------------------------------------------------------- */
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("overview");
   const { mockMode, setMockMode } = useHybrid(true);
