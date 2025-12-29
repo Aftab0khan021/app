@@ -18,10 +18,10 @@ import {
 /* ---------------------------------------------------------
    API base + helper
 --------------------------------------------------------- */
-const API_BASE =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE) ||
-  (typeof process !== "undefined" && process.env?.REACT_APP_API_BASE) ||
-  "";
+// FIX: Explicitly point to Render backend in production to prevent 404s
+const API_BASE = process.env.NODE_ENV === 'production' 
+  ? "https://portfolio-k4cd.onrender.com" 
+  : "http://localhost:8000";
 
 async function fetchJSON(path, options = {}) {
   const url =

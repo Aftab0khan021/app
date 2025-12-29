@@ -31,6 +31,7 @@ apiClient.interceptors.response.use(
 );
 
 // API endpoints
+// FIX: This named export 'api' was missing, causing the build failure
 export const api = {
   // Public
   getPersonalInfo: () => apiClient.get('/personal'),
